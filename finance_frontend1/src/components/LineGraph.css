@@ -1,0 +1,15 @@
+.line-graph-container {
+    width: 100%;
+    max-width: 800px; /* ✅ Fix width */
+    height: 400px; /* ✅ Fix height */
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-wrapper {
+    width: 100%;
+    height: 100%;
+}

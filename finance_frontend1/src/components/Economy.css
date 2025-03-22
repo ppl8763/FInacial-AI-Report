@@ -1,0 +1,58 @@
+.economy-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid #ddd;
+}
+
+.card:hover, .card.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+/* ✅ Continue Button (Link) */
+.continue-link {
+    display: inline-block;
+    background-color: #007bff;
+    color: black;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.continue-link:hover {
+    background-color: #0056b3;
+}

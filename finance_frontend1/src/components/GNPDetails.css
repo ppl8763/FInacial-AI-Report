@@ -1,0 +1,33 @@
+.gnp-details {
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #28a745;
+    color: white;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 900px;
+    height: 600px;  /* ✅ Increased height for better visibility */
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

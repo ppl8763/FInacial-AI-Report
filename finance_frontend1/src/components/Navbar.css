@@ -1,0 +1,103 @@
+/* Base Styles */
+.navbar {
+    background: linear-gradient(135deg, #0056b3, #003f8a); /* Gradient Background */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Subtle Shadow */
+    position: sticky; /* Sticky Navbar */
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+}
+
+.navbar-logo {
+    height: 40px; /* Adjust logo size */
+    width: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Rounded corners for logo */
+}
+
+.navbar h2 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0; /* Remove default margin */
+    letter-spacing: 1px; /* Add spacing between letters */
+    color: #fff;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 50px;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease-in-out; /* Smooth transitions */
+    font-weight: bold;
+    padding: 8px 12px; /* Add padding for better click area */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.navbar a:hover {
+    background: rgba(255, 215, 0, 0.2); /* Subtle highlight on hover */
+    color: #FFD700; /* Gold color for hover */
+}
+
+.cta-button {
+    background: #FFD700; /* Gold Button */
+    color: #8B0000; /* Contrasting Text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px; /* Pill-shaped button */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+    background: #FFC107; /* Slightly darker gold on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 20px;
+    }
+
+    .navbar-brand {
+        margin-bottom: 10px;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .navbar a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cta-button {
+        width: 100%;
+    }
+}

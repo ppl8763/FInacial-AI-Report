@@ -11,6 +11,7 @@ const GDPDetails = lazy(() => import("./components/GDPDetails"));
 const GNPDetails = lazy(() => import("./components/GNPDetails"));
 const GDPGrowthDetails = lazy(() => import("./components/GDPGrowthDetails"));
 const InflationDetails = lazy(() => import("./components/InflationDetails"));
+const StockPredictionPage = lazy(() => import("./components/StockPredictionPage"));
 const NotFound = lazy(() => import("./components/NotFound"));
 
 const App = () => {
@@ -26,6 +27,8 @@ const App = () => {
                     <Route path="/gnp-details" element={<GNPDetails />} />
                     <Route path="/gdp-growth-details" element={<GDPGrowthDetails />} />
                     <Route path="/inflation-details" element={<InflationDetails />} />
+                    {/* New Stock Prediction Route */}
+                    <Route path="/stock-prediction/:symbol" element={<StockPredictionPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Suspense>

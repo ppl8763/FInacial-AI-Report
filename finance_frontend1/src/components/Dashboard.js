@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PieChart from "./PieChart";
 import LineGraph from "./LineGraph";
 import "./Dashboard.css";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [financialData, setFinancialData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -11,15 +13,22 @@ const Dashboard = () => {
     const [stockData, setStockData] = useState(null);
     const [predictedPrice, setPredictedPrice] = useState(null);
     const [filterDays, setFilterDays] = useState(30);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/financial-data")
-            .then((response) => response.json())
-            .then((data) => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/financial-data");
+                const data = await response.json();
                 setFinancialData(data);
                 setFilteredData(data);
-            })
-            .catch((error) => console.error("Error fetching MySQL data:", error));
+            } catch (error) {
+                console.error("Error fetching MySQL data:", error);
+                setError("Failed to load financial data");
+            }
+        };
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -34,25 +43,24 @@ const Dashboard = () => {
     }, [searchQuery, financialData]);
 
     const fetchStockData = async () => {
-        if (!symbol) return;
+        if (!symbol) {
+            setError("Please enter a stock symbol");
+            return;
+        }
+        
+        setIsLoading(true);
+        setError(null);
+        
         try {
             const response = await fetch(`http://localhost:5000/api/stock/${symbol}`);
+            if (!response.ok) throw new Error("Failed to fetch stock data");
             const data = await response.json();
             setStockData(data);
         } catch (error) {
             console.error("Error fetching stock data:", error);
-        }
-    };
-
-    const fetchStockPrediction = async () => {
-        if (!symbol) return;
-        try {
-            const response = await fetch(`http://localhost:5000/api/predict-stock/${symbol}`);
-            const data = await response.json();
-            setPredictedPrice(data.error ? "Prediction not available" : `Predicted Price: $${data.predicted_price}`);
-        } catch (error) {
-            console.error("Error fetching stock prediction:", error);
-            setPredictedPrice("Prediction error");
+            setError(error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -71,25 +79,43 @@ const Dashboard = () => {
         <div className="dashboard-container">
             <h2>📊 Financial Dashboard</h2>
 
-            {/* 📈 Stock Search & Prediction */}
+            {/* Stock Search & Navigation */}
             <div className="search-container">
                 <input
                     type="text"
                     value={symbol}
-                    onChange={(e) => setSymbol(e.target.value)}
-                    placeholder="Enter Stock Symbol (AAPL, GOOGL, etc)"
+                    onChange={(e) => {
+                        setSymbol(e.target.value);
+                        setError(null);
+                    }}
+                    placeholder="Enter Stock Symbol (AAPL, GOOGL, TESL etc)"
+                    disabled={isLoading}
                 />
-                <button onClick={fetchStockData}>🔍 Search</button>
-                <button onClick={fetchStockPrediction}>🤖 Predict</button>
+                <button 
+                    onClick={fetchStockData}
+                    disabled={isLoading || !symbol}
+                >
+                    {isLoading ? "⌛ Loading..." : "🔍 Search"}
+                </button>
+                <button 
+                    onClick={() => navigate(`/stock-prediction/${symbol}`)}
+                    disabled={!symbol || !stockData}
+                >
+                    📊 View Detailed Prediction
+                </button>
             </div>
 
-            {/* 🎯 Predicted Price Result */}
-            {predictedPrice && <p className="prediction-result">{predictedPrice}</p>}
+            {/* Error Messages */}
+            {error && <p className="error-message">❌ {error}</p>}
 
-            {/* 📌 Stock Data Filter */}
+            {/* Stock Data Filter */}
             <div className="filter-container">
                 <label>Filter: </label>
-                <select value={filterDays} onChange={(e) => setFilterDays(Number(e.target.value))}>
+                <select 
+                    value={filterDays} 
+                    onChange={(e) => setFilterDays(Number(e.target.value))}
+                    disabled={!stockData}
+                >
                     <option value="7">Last 7 Days</option>
                     <option value="30">Last 30 Days</option>
                     <option value="90">Last 3 Months</option>
@@ -97,7 +123,7 @@ const Dashboard = () => {
                 </select>
             </div>
 
-            {/* 📊 Stock Data Table & Line Graph */}
+            {/* Stock Data Display */}
             {stockData && (
                 <div className="stock-data-container">
                     <h3>📈 Stock Data for {symbol.toUpperCase()}</h3>
@@ -114,9 +140,9 @@ const Dashboard = () => {
                             {getFilteredStockData().map((item, index) => (
                                 <tr key={index}>
                                     <td>{item.date}</td>
-                                    <td>${item.open}</td>
-                                    <td>${item.close}</td>
-                                    <td>{item.volume.toLocaleString()}</td>
+                                    <td>${parseFloat(item.open).toFixed(2)}</td>
+                                    <td>${parseFloat(item.close).toFixed(2)}</td>
+                                    <td>{parseInt(item.volume).toLocaleString()}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -125,7 +151,7 @@ const Dashboard = () => {
                 </div>
             )}
 
-            {/* 🏦 Financial Data Pie Chart */}
+            {/* Financial Data Pie Chart */}
             {filteredData.length > 0 ? (
                 <>
                     <h3>📊 Financial Insights</h3>
